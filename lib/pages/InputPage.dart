@@ -1,5 +1,12 @@
+import 'package:bmi_tt9/Widgets/floatingButton.dart';
 import 'package:bmi_tt9/Widgets/my_card.dart';
+import 'package:bmi_tt9/pages/result_page.dart';
 import 'package:flutter/material.dart';
+
+import '../Widgets/bottom_btn.dart';
+import '../Widgets/card_content.dart';
+import '../bmi_brain.dart';
+import '../constants.dart';
 
 class InputPage extends StatefulWidget {
   @override
@@ -7,10 +14,11 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  bool? isMale;
-  int? height;
-  int? weight;
-  int? age;
+  Gender selectedGender = Gender.male;
+  int weight = 60;
+  int height = 170;
+  int age = 20;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,120 +31,121 @@ class _InputPageState extends State<InputPage> {
               children: [
                 Expanded(
                     child: MyCard(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.male,
-                        size: 60,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("Male")
-                    ],
+                  color:
+                      selectedGender == Gender.male ? activeColor : cardColor,
+                  onTap: () {
+                    setState(() {
+                      selectedGender = Gender.male;
+                    });
+                  },
+                  child: CardContent(
+                    icon: Icons.male,
+                    text: 'male',
                   ),
                 )),
                 Expanded(
                     child: MyCard(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.female,
-                        size: 60,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("Female")
-                    ],
+                  color:
+                      selectedGender == Gender.female ? activeColor : cardColor,
+                  onTap: () {
+                    setState(() {
+                      selectedGender = Gender.female;
+                    });
+                  },
+                  child: CardContent(
+                    icon: Icons.female,
+                    text: 'female',
                   ),
                 )),
               ],
             ),
             Expanded(
-              child: Container(
-                  margin: EdgeInsets.all(12),
-                  padding: EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.grey,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "HEIGHT",
-                        style: TextStyle(fontSize: 24),
+              child: MyCard(
+                color: cardColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "HEIGHT",
+                      style: titleStyle,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          height.toString(),
+                          style: NumTextStyle,
+                        ),
+                        Text(
+                          "cm",
+                          style: titleStyle,
+                        ),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: Colors.white,
+                        inactiveTrackColor: const Color(0xFF8D8E98),
+                        thumbColor: const Color(0xFFEB1555),
+                        overlayColor: const Color(0x29EB1555),
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 15.0),
+                        overlayShape:
+                            const RoundSliderOverlayShape(overlayRadius: 35.0),
                       ),
-                      SizedBox(
-                        height: 8,
+                      child: Slider(
+                        value: height.toDouble(),
+                        min: 120,
+                        max: 220,
+                        onChanged: (double newValue) {
+                          setState(() {
+                            height = newValue.round();
+                          });
+                        },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            "150",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 54),
-                          ),
-                          Text(
-                            "cm",
-                            style: TextStyle(),
-                          ),
-                        ],
-                      ),
-                      Slider(value: 0.3, onChanged: (value) {}),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
             ),
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(12),
-                    padding: EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey,
-                    ),
+                  child: MyCard(
+                    color: cardColor,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("WEIGHT"),
+                        Text("WEIGHT", style: titleStyle),
                         SizedBox(
                           height: 4,
                         ),
-                        Text(
-                          "60",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
+                        Text(weight.toString(), style: NumTextStyle),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
+                            My_fab(
+                              onPressed: () {
+                                setState(() {
+                                  weight++;
+                                });
+                              },
+                              icon: Icons.add,
+                            ),
+                            My_fab(
+                              onPressed: () {
+                                setState(() {
+                                  weight--;
+                                });
+                              },
+                              icon: Icons.remove,
+                            )
                           ],
                         ),
                       ],
@@ -144,66 +153,70 @@ class _InputPageState extends State<InputPage> {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(12),
-                    padding: EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey,
-                    ),
+                  child: MyCard(
+                    color: cardColor,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Age"),
+                        Text(
+                          "AGE",
+                          style: titleStyle,
+                        ),
                         SizedBox(
                           height: 4,
                         ),
                         Text(
-                          "20",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
+                          age.toString(),
+                          style: NumTextStyle,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
+                            My_fab(
+                              onPressed: () {
+                                setState(() {
+                                  age++;
+                                });
+                              },
+                              icon: Icons.add,
+                            ),
+                            My_fab(
+                              onPressed: () {
+                                setState(() {
+                                  age--;
+                                });
+                              },
+                              icon: Icons.remove,
+                            )
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
                 ),
               ],
             ),
-            Container(
-              height: 80,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.red,
-              ),
-              child: Center(
-                child: Text(
-                  "Calculate",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-              ),
+            BottomBtn(
+              onTap: () {
+                BMI calc = BMI(weight, height);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ResultPage(
+                              resultLabel: calc.getLabel(),
+                              bmi: calc.calcBMI().toStringAsFixed(1),
+                              advice: calc.getAdvice(),
+                              labelColor: calc.getTextColor(),
+                            )));
+              },
+              btnText: 'calculate',
             )
           ],
         ));
   }
+}
+
+enum Gender {
+  male,
+  female,
 }

@@ -1,3 +1,4 @@
+import 'package:bmi_tt9/constants.dart';
 import 'package:flutter/material.dart';
 
 class My_fab extends StatelessWidget {
@@ -8,13 +9,13 @@ class My_fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      constraints: const BoxConstraints(
-        minHeight: 86,
-        maxWidth: 86,
+      constraints: const BoxConstraints.tightFor(
+        width: 56.0,
+        height: 56.0,
       ),
       shape: CircleBorder(),
       padding: EdgeInsets.all(12),
-      fillColor: Colors.red,
+      fillColor: btnColor,
       onPressed: onPressed,
       child: Icon(
         icon,
